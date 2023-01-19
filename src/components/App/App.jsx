@@ -53,6 +53,19 @@ export class App extends Component {
       contact.name.toLowerCase().includes(this.state.filter.toLowerCase())
     );
   };
+  componentDidMount() {
+    const storageContact = localStorage.getItem('contact');
+      const parseStorageContact = JSON.parse(storageContact);
+      if(parseStorageContact){
+      this.setState({contacts: parseStorageContact})
+  }};
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts!==prevState.contacts){
+      localStorage.setItem('contact', JSON.stringify(this.state.contacts));
+    };
+  };
+
   render() {
     const { filter } = this.state;
     return (
