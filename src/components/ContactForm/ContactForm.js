@@ -1,19 +1,14 @@
-import React, { Component } from 'react';
+
 import propTypes from 'prop-types';
 import { nanoid } from 'nanoid';
 import { Formik, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import { FormStyled, InputStyle, AddButton } from './ContactForm.styled';
 
-export class ContactForm extends Component {
-  static propType = {
-    onSubmit: propTypes.func.isRequired,
-  };
-  initialValues = {
-    name: '',
-    number: '',
-  };
-  schema = yup.object().shape({
+
+export const ContactForm =({onSubmit}) => {
+
+  let schema = yup.object().shape({
     name: yup
       .string()
       .matches(
@@ -30,18 +25,17 @@ export class ContactForm extends Component {
       .positive()
       .integer(),
   });
-  handleSubmit = ({ name, number }, { resetForm }) => {
+  const handleSubmit = ({ name, number }, { resetForm }) => {
     const contact = { id: nanoid(), name, number };
-    this.props.onSubmit(contact);
+    onSubmit(contact);
     resetForm();
   };
 
-  render() {
     return (
       <Formik
-        initialValues={this.initialValues}
-        onSubmit={this.handleSubmit}
-        validationSchema={this.schema}
+        initialValues={{name:'', number:''}}
+        onSubmit={handleSubmit}
+        validationSchema={schema}
       >
         <FormStyled>
           <label>Name</label>
@@ -65,4 +59,9 @@ export class ContactForm extends Component {
       </Formik>
     );
   }
-}
+ContactForm.propTypes = {
+  onSubmit: propTypes.func.isRequired,
+};
+
+
+
